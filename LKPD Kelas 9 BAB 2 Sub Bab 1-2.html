@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKPD - Hak dan Kewajiban Warga Negara</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* CSS Anda sudah sangat baik, tidak ada perubahan di sini */
+        body, h1, h2, h3, h4, p, div, label, input, textarea, button, select {
+            font-family: 'Times New Roman', Times, serif;
+        }
+        body {
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        input, textarea {
+            -webkit-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .stage-container {
+            margin-bottom: 50px;
+            border: 3px solid #e3f2fd;
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .stage-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .stage-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+        .stage-header p {
+            margin: 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .explanation {
+            background: #e8f5e8;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 30px;
+            margin-bottom: 25px;
+            border-radius: 0 10px 10px 0;
+        }
+        .case-study {
+            background: #fffbe6;
+            border-left: 5px solid #fbc02d;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #5d4037;
+            line-height: 1.6;
+        }
+        .explanation h4 {
+            margin: 0 0 10px 0;
+            color: #2e7d32;
+            font-size: 1.1em;
+        }
+        .explanation p {
+            margin: 0;
+            line-height: 1.6;
+            color: #424242;
+        }
+        .question {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .question:hover {
+            border-color: #42a5f5;
+            box-shadow: 0 5px 15px rgba(66, 165, 245, 0.2);
+        }
+        .question-number {
+            background: #42a5f5;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .question-text {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #42a5f5;
+            box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.1);
+        }
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        .pdf-btn {
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px 10px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        .pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .identity-section {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .identity-section h2 {
+            margin: 0 0 20px 0;
+            color: #495057;
+            font-size: 1.3em;
+        }
+        .identity-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group.full-width {
+            grid-column: 1 / -1;
+            margin-bottom: 15px;
+        }
+        .student-name-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .student-name-group input {
+            flex-grow: 1;
+        }
+        .remove-name-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            flex-shrink: 0;
+        }
+        .remove-name-btn:hover {
+            background: #ee5a52;
+        }
+        .table-of-contents {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .table-of-contents h2 {
+            margin: 0 0 25px 0;
+            color: #495057;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        .toc-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .toc-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .toc-item:hover {
+            border-color: #42a5f5;
+            box-shadow: 0 8px 25px rgba(66, 165, 245, 0.2);
+            transform: translateY(-2px);
+        }
+        .toc-number {
+            background: linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .toc-content {
+            flex: 1;
+        }
+        .toc-content h3 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        .toc-arrow {
+            font-size: 1.5em;
+            color: #42a5f5;
+            margin-left: 15px;
+            transition: transform 0.3s ease;
+        }
+        .toc-item:hover .toc-arrow {
+            transform: translateX(5px);
+        }
+        .back-btn {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+        .stage-navigation {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+        }
+        .nav-btn {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+        }
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(23, 162, 184, 0.4);
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #42a5f5;
+            box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.1);
+        }
+        .form-group input[readonly] {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        @media (max-width: 768px) {
+            .container { margin: 10px; border-radius: 15px; }
+            .header { padding: 20px; }
+            .header h1 { font-size: 1.8em; }
+            .content { padding: 20px; }
+            .form-row { grid-template-columns: 1fr; gap: 15px; }
+            .toc-item { flex-direction: column; text-align: center; padding: 20px; }
+            .toc-number { margin-right: 0; margin-bottom: 15px; }
+            .toc-arrow { margin-left: 0; margin-top: 10px; }
+            .submit-section { padding: 20px; }
+            .pdf-btn { width: 100%; margin: 10px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📚 LEMBAR KERJA PESERTA DIDIK</h1>
+            <p>Hak dan Kewajiban Warga Negara</p>
+            <p style="font-style: italic; opacity: 0.8; margin-top: 15px;">"Setiap jawaban yang kamu tulis adalah langkah untuk menjadi warga negara yang lebih baik. Semangat!"</p>
+        </header>
+        <main class="content">
+            <section class="identity-section">
+                <h2>📝 Identitas Siswa</h2>
+                <div class="identity-form">
+                    <div class="form-group full-width">
+                        <label>Nama Lengkap (Anggota Kelompok):</label>
+                        <div id="studentNamesContainer"></div>
+                        <button type="button" id="addStudentBtn" class="back-btn" style="margin-top: 10px;">+ Tambah Anggota</button>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="studentGroup">Kelompok:</label><input type="text" id="studentGroup" placeholder="Contoh: Kelompok 1"></div>
+                        <div class="form-group"><label for="studentClass">Kelas:</label><input type="text" id="studentClass" placeholder="Contoh: 9A"></div>
+                        <div class="form-group"><label for="currentDateTime">Tanggal & Waktu:</label><input type="text" id="currentDateTime" readonly></div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="tableOfContents" class="table-of-contents">
+                <h2>📚 Daftar Isi</h2>
+                <div class="toc-items">
+                    <div class="toc-item" data-stage="stageA"><div class="toc-number">1</div><div class="toc-content"><h3>Pengertian, contoh, dan dasar hukum hak serta kewajiban warga negara</h3></div><div class="toc-arrow">→</div></div>
+                    <div class="toc-item" data-stage="stageB"><div class="toc-number">2</div><div class="toc-content"><h3>Keseimbangan dalam melaksanakan hak dan kewajiban dalam kehidupan sehari-hari</h3></div><div class="toc-arrow">→</div></div>
+                </div>
+            </section>
+            
+            <div id="stageA" class="stage-container" style="display: none;">
+                <div class="stage-header"><h2>📝</h2><p>Hak dan Kewajiban Warga Negara</p><button class="back-btn" data-action="show-toc">← Kembali ke Daftar Isi</button></div>
+                <div class="explanation">
+                    <h4>💡 Penjelasan Singkat:</h4>
+                    <p><strong>Hak</strong> adalah sesuatu yang diterima oleh warga negara yang dijamin oleh undang-undang. <strong>Kewajiban</strong> adalah sesuatu yang harus dilakukan oleh warga negara sesuai peraturan yang berlaku.</p>
+                    <p style="margin-top:10px; font-style:italic; color:#2e7d32;"><strong>Ingat:</strong> Pengetahuan tentang hak dan kewajiban adalah kunci untuk membangun masyarakat yang adil.</p>
+                </div>
+                <div class="question"><div class="question-text"><span class="question-number">1</span> Jelaskan pengertian hak dan kewajiban warga negara menurut pemahamanmu!</div><textarea id="answer1" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="question-text"><span class="question-number">2</span> Sebutkan 3 contoh hak warga negara yang dijamin dalam UUD 1945!</div><textarea id="answer2" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="question-text"><span class="question-number">3</span> Sebutkan 3 contoh kewajiban warga negara menurut UUD 1945!</div><textarea id="answer3" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="question-text"><span class="question-number">4</span> Mengapa hak dan kewajiban warga negara perlu diatur dalam konstitusi?</div><textarea id="answer4" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="question-text"><span class="question-number">5</span> Apa perbedaan antara hak asasi manusia dengan hak warga negara?</div><textarea id="answer5" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="case-study"><strong>Wacana Kasus 1:</strong> Sebuah pabrik tekstil besar beroperasi di dekat pemukiman warga dan membuang limbah cairnya ke sungai tanpa diolah terlebih dahulu. Akibatnya, sungai menjadi tercemar, ikan-ikan mati, dan warga sekitar mulai mengeluhkan masalah kesehatan. Di sisi lain, pabrik tersebut mempekerjakan ratusan warga desa dan menjadi sumber utama pendapatan mereka.</div><div class="question-text"><span class="question-number">6</span> Berdasarkan wacana tersebut, analisislah benturan hak yang terjadi antara pabrik, pekerja, dan masyarakat sekitar. Menurutmu, bagaimana solusi yang adil untuk mengatasi masalah ini?</div><textarea id="answer6" placeholder="Analisis benturan hak, solusi, dan tindak lanjut..."></textarea></div>
+                <div class="question"><div class="case-study"><strong>Wacana Kasus 2:</strong> Sekelompok mahasiswa melakukan unjuk rasa untuk menyuarakan aspirasi menolak kenaikan biaya pendidikan. Mereka menggunakan hak kebebasan berpendapat dengan berorasi di depan umum. Namun, aksi mereka menyebabkan kemacetan total di jalan utama selama berjam-jam dan beberapa fasilitas umum di sekitarnya rusak karena terinjak-injak.</div><div class="question-text"><span class="question-number">7</span> Kasus di atas menunjukkan adanya pelaksanaan hak menyampaikan pendapat. Namun, kewajiban apa saja yang diabaikan oleh para mahasiswa dalam melaksanakan hak tersebut? Jelaskan jawabanmu!</div><textarea id="answer7" placeholder="Analisis kewajiban yang diabaikan..."></textarea></div>
+                <div class="stage-navigation"><button class="nav-btn" data-stage="stageB">Lanjut ke Bagian 2 →</button></div>
+            </div>
+
+            <div id="stageB" class="stage-container" style="display: none;">
+                <div class="stage-header"><h2>📝</h2><p>Pelaksanaan Hak dan Kewajiban Warga Negara secara Seimbang</p><button class="back-btn" data-action="show-toc">← Kembali ke Daftar Isi</button></div>
+                <div class="explanation">
+                    <h4>💡 Penjelasan Singkat:</h4>
+                    <p>Pelaksanaan hak dan kewajiban harus <strong>seimbang</strong> agar tercipta kehidupan yang harmonis. Mendahulukan kewajiban sebelum menuntut hak adalah sikap yang bijaksana sebagai warga negara yang baik.</p>
+                    <p style="margin-top:10px; font-style:italic; color:#2e7d32;"><strong>Ingat:</strong> Keseimbangan adalah fondasi dari keharmonisan. Laksanakan kewajibanmu, maka hak akan mengikutimu.</p>
+                </div>
+                <div class="question"><div class="question-text"><span class="question-number">8</span> Apa yang dimaksud dengan pelaksanaan hak dan kewajiban secara seimbang?</div><textarea id="answer8" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="question-text"><span class="question-number">9</span> Berikan 2 contoh pelaksanaan hak dan kewajiban yang seimbang dalam lingkungan sekolah!</div><textarea id="answer9" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="question-text"><span class="question-number">10</span> Apa akibat yang terjadi jika seseorang hanya menuntut hak tanpa mau melaksanakan kewajibannya?</div><textarea id="answer10" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="question-text"><span class="question-number">11</span> Sebagai pelajar, bagaimana cara kalian melaksanakan hak dan kewajiban secara seimbang untuk mendukung kemajuan bangsa?</div><textarea id="answer11" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="question-text"><span class="question-number">12</span> Mengapa keseimbangan antara hak dan kewajiban penting untuk menciptakan keadilan sosial?</div><textarea id="answer12" placeholder="Isi jawabanmu di sini..."></textarea></div>
+                <div class="question"><div class="case-study"><strong>Wacana Kasus 3:</strong> Warga di Perumahan "Asri Damai" selalu menuntut hak mereka untuk mendapatkan lingkungan yang bersih dan aman dari pengelola perumahan. Namun, sebagian besar warga tidak mau membayar iuran kebersihan dan keamanan bulanan (kewajiban) tepat waktu. Akibatnya, sampah menumpuk dan pos keamanan sering kosong karena petugas tidak digaji.</div><div class="question-text"><span class="question-number">13</span> Analisislah hubungan sebab-akibat antara kewajiban yang diabaikan dan hak yang tidak terpenuhi dalam wacana tersebut. Menurutmu, apa solusi efektif untuk memecahkan masalah ini?</div><textarea id="answer13" placeholder="Analisis sebab-akibat, solusi efektif..."></textarea></div>
+                <div class="question"><div class="case-study"><strong>Wacana Kasus 4:</strong> Andi menggunakan haknya untuk mengakses internet dan media sosial. Ia sangat aktif membagikan berbagai informasi. Suatu hari, ia menerima berita tentang "bahaya vaksin" dari grup percakapan dan langsung menyebarkannya ke semua kontaknya tanpa memeriksa kebenarannya. Berita tersebut ternyata hoaks dan menyebabkan kepanikan di lingkungan sekitarnya.</div><div class="question-text"><span class="question-number">14</span> Dalam kasus Andi, hak apa yang ia gunakan dan kewajiban apa yang ia lalaikan sebagai warga negara digital? Jelaskan mengapa kewajiban tersebut penting dalam menggunakan hak di dunia maya!</div><textarea id="answer14" placeholder="Analisis hak & kewajiban..."></textarea></div>
+                <div class="stage-navigation"><button class="nav-btn" data-stage="stageA">← Kembali ke Bagian 1</button></div>
+            </div>
+
+            <div class="submit-section">
+                <h2 style="font-weight: 600; color: #495057; margin-top:0; margin-bottom: 20px;">Unduh Jawaban Anda</h2>
+                <p style="color: #6c757d; font-size: 1em; margin-bottom: 25px;">Kerja kerasmu telah selesai! Sekarang, saatnya menyimpan hasil karyamu. Kamu hebat!</p>
+                <div>
+                    <button class="pdf-btn" data-stage="stageA">📄 Unduh Jawaban Bagian 1 (PDF)</button>
+                    <button class="pdf-btn" data-stage="stageB">📄 Unduh Jawaban Bagian 2 (PDF)</button>
+                </div>
+            </div>
+            </main>
+    </div>
+
+    <script>
+        // Kode JavaScript tetap sama, tidak ada perubahan
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const { jsPDF } = window.jspdf;
+
+            const CORRECT_PIN_STAGE_B = '12345*';
+            let isStageBUnlocked = false;
+            const TOTAL_QUESTIONS = 14;
+
+            const elements = {
+                studentNamesContainer: document.getElementById('studentNamesContainer'),
+                studentGroup: document.getElementById('studentGroup'),
+                studentClass: document.getElementById('studentClass'),
+                currentDateTime: document.getElementById('currentDateTime'),
+                tableOfContents: document.getElementById('tableOfContents'),
+                stageA: document.getElementById('stageA'),
+                stageB: document.getElementById('stageB'),
+                addStudentBtn: document.getElementById('addStudentBtn')
+            };
+
+            function showModal(title, message, color = '#f44336') {
+                const existingModal = document.querySelector('.modal-popup');
+                if (existingModal) existingModal.remove();
+                
+                const modal = document.createElement('div');
+                modal.className = 'modal-popup';
+                modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;`;
+                modal.innerHTML = `
+                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-family: 'Times New Roman', Times, serif;">
+                        <h3 style="color: ${color}; margin-top: 0;">${title}</h3>
+                        <p>${message}</p>
+                        <button style="background: ${color}; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px;">OK</button>
+                    </div>`;
+                
+                modal.querySelector('button').onclick = () => modal.remove();
+                document.body.appendChild(modal);
+            }
+
+            function accessStageB(action) {
+                if (isStageBUnlocked) {
+                    action();
+                    return;
+                }
+                const enteredPin = prompt("Untuk melanjutkan ke Bagian 2, silakan masukkan PIN:");
+                if (enteredPin === null) return;
+
+                if (enteredPin === CORRECT_PIN_STAGE_B) {
+                    showModal('✅ Berhasil', 'PIN Benar! Anda sekarang dapat mengakses Bagian 2.', '#4caf50');
+                    isStageBUnlocked = true;
+                    action();
+                } else {
+                    showModal('❌ Gagal', 'PIN yang Anda masukkan salah. Silakan coba lagi.');
+                }
+            }
+            
+            function addStudentNameField(name = '') {
+                const nameGroup = document.createElement('div');
+                nameGroup.className = 'student-name-group';
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'student-name-input';
+                input.placeholder = 'Masukkan nama anggota';
+                input.value = name;
+                input.oninput = saveIdentity;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'remove-name-btn';
+                removeBtn.textContent = 'X';
+                removeBtn.onclick = () => {
+                    nameGroup.remove();
+                    saveIdentity();
+                };
+                
+                nameGroup.append(input, removeBtn);
+                elements.studentNamesContainer.appendChild(nameGroup);
+            }
+
+            function saveIdentity() {
+                const names = [...document.querySelectorAll('.student-name-input')].map(input => input.value);
+                localStorage.setItem('lkpd_studentNames', JSON.stringify(names));
+                localStorage.setItem('lkpd_studentGroup', elements.studentGroup.value);
+                localStorage.setItem('lkpd_studentClass', elements.studentClass.value);
+            }
+
+            function loadIdentity() {
+                const savedNames = JSON.parse(localStorage.getItem('lkpd_studentNames') || '[]');
+                if (savedNames.length > 0) {
+                    savedNames.forEach(name => addStudentNameField(name));
+                } else {
+                    addStudentNameField();
+                }
+                elements.studentGroup.value = localStorage.getItem('lkpd_studentGroup') || '';
+                elements.studentClass.value = localStorage.getItem('lkpd_studentClass') || '';
+            }
+            
+            function loadAnswers() {
+                for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                    const textarea = document.getElementById(`answer${i}`);
+                    if (textarea) {
+                        textarea.value = localStorage.getItem(`lkpd_answer_${i}`) || '';
+                        textarea.addEventListener('input', () => {
+                            localStorage.setItem(`lkpd_answer_${i}`, textarea.value);
+                        });
+                    }
+                }
+            }
+
+            function showStage(stageId) {
+                elements.stageA.style.display = 'none';
+                elements.stageB.style.display = 'none';
+                elements.tableOfContents.style.display = 'none';
+                
+                const stageToShow = document.getElementById(stageId);
+                if (stageToShow) {
+                    stageToShow.style.display = 'block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+
+            function showTableOfContents() {
+                elements.stageA.style.display = 'none';
+                elements.stageB.style.display = 'none';
+                elements.tableOfContents.style.display = 'block';
+                elements.tableOfContents.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function updateDateTime() {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' };
+                elements.currentDateTime.value = now.toLocaleDateString('id-ID', options);
+            }
+
+            function generatePDF(stageId) {
+                const names = [...document.querySelectorAll('.student-name-input')].map(input => input.value.trim()).filter(Boolean);
+                const group = elements.studentGroup.value.trim();
+                const studentClass = elements.studentClass.value.trim();
+
+                if (names.length === 0 || !group || !studentClass) {
+                    showModal('⚠️ Peringatan', 'Mohon lengkapi seluruh identitas siswa (Nama, Kelompok, dan Kelas).');
+                    return;
+                }
+
+                showModal('⏳ Mohon Tunggu', 'Sedang membuat file PDF...', '#42a5f5');
+                
+                const doc = new jsPDF();
+                let y = 15;
+                const pageHeight = doc.internal.pageSize.height;
+                const margin = 15;
+
+                const addText = (text, size, style, indent = 0) => {
+                    if (y > pageHeight - margin - 10) {
+                        doc.addPage();
+                        y = margin;
+                    }
+                    doc.setFont('Times', style);
+                    doc.setFontSize(size);
+                    const lines = doc.splitTextToSize(text, 180 - indent);
+                    doc.text(lines, margin + indent, y);
+                    y += (lines.length * (size * 0.35)) + 3;
+                };
+
+                const isStageA = stageId === 'stageA';
+                const startQuestion = isStageA ? 1 : 8;
+                const endQuestion = isStageA ? 7 : 14;
+                const partTitle = isStageA ? 'Bagian 1' : 'Bagian 2';
+
+                doc.setFont('Times', 'bold'); doc.setFontSize(16); doc.text('LEMBAR KERJA PESERTA DIDIK', 105, y, { align: 'center' }); y += 7;
+                doc.setFont('Times', 'normal'); doc.setFontSize(12); doc.text(`Jawaban ${partTitle}: Hak dan Kewajiban Warga Negara`, 105, y, { align: 'center' }); y += 10;
+                doc.line(margin, y, 200, y); y += 10;
+
+                addText('IDENTITAS SISWA', 14, 'bold');
+                const formattedNames = names.map((name, index) => `${index + 1}. ${name}`).join('\n');
+                addText(`Nama Anggota:\n${formattedNames}`, 12, 'normal');
+                addText(`Kelompok: ${group}`, 12, 'normal');
+                addText(`Kelas: ${studentClass}`, 12, 'normal');
+                y += 5; doc.line(margin, y, 200, y); y += 10;
+                
+                addText(`HASIL JAWABAN - ${partTitle.toUpperCase()}`, 14, 'bold');
+                for (let i = startQuestion; i <= endQuestion; i++) {
+                    const questionEl = document.querySelector(`#answer${i}`).previousElementSibling;
+                    let questionText = questionEl.innerText;
+                    const caseStudyEl = questionEl.previousElementSibling;
+                    if (caseStudyEl && caseStudyEl.classList.contains('case-study')) {
+                        const caseText = caseStudyEl.innerText.replace(/\s+/g, ' ').trim();
+                        questionText = `${caseText}\n\nPertanyaan: ${questionText}`;
+                    }
+                    const answerText = document.getElementById(`answer${i}`).value.trim() || '[Belum dijawab]';
+                    addText(questionText, 12, 'bold');
+                    addText('Jawaban:', 12, 'italic');
+                    addText(answerText, 12, 'normal', 5);
+                    y += 5;
+                }
+                
+                const fileName = `LKPD_${group.replace(/\s+/g, '_')}_${studentClass}_${partTitle.replace(' ', '_')}.pdf`;
+                doc.save(fileName);
+                
+                const currentModal = document.querySelector('.modal-popup');
+                if (currentModal) currentModal.remove();
+                
+                showModal('✅ Berhasil', `PDF ${partTitle} berhasil diunduh sebagai <strong>${fileName}</strong>.`, '#4caf50');
+            }
+            
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('paste', e => {
+                    e.preventDefault();
+                    showModal('❌ Aksi Dilarang', 'Dilarang menempel (paste) jawaban dari sumber lain. Silakan ketik jawaban Anda sendiri.');
+                });
+            });
+
+            document.body.addEventListener('click', (e) => {
+                const target = e.target;
+                const navButton = target.closest('[data-stage]');
+                const backButton = target.closest('[data-action="show-toc"]');
+
+                if (navButton) {
+                    const stageId = navButton.dataset.stage;
+                    if (stageId === 'stageB') {
+                        accessStageB(() => showStage(stageId));
+                    } else {
+                        showStage(stageId);
+                    }
+                }
+                
+                if (backButton) {
+                    showTableOfContents();
+                }
+            });
+
+            elements.addStudentBtn.addEventListener('click', () => addStudentNameField());
+            
+            document.querySelectorAll('.pdf-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const stageId = btn.dataset.stage;
+                    
+                    const isStageA = stageId === 'stageA';
+                    const start = isStageA ? 1 : 8;
+                    const end = isStageA ? 7 : 14;
+                    const emptyQuestions = [];
+                    for(let i = start; i <= end; i++) {
+                        if (document.getElementById(`answer${i}`).value.trim() === '') {
+                            emptyQuestions.push(i);
+                        }
+                    }
+
+                    if (emptyQuestions.length > 0) {
+                        showModal('⚠️ Peringatan', `Mohon lengkapi jawaban di Bagian ${isStageA ? '1' : '2'} untuk nomor berikut sebelum mengunduh:<br><strong style="color: #1976d2;">${emptyQuestions.join(', ')}</strong>`);
+                        return;
+                    }
+                    
+                    if (stageId === 'stageB') {
+                        accessStageB(() => generatePDF(stageId));
+                    } else {
+                        generatePDF(stageId);
+                    }
+                });
+            });
+
+            function init() {
+                loadIdentity();
+                loadAnswers();
+                updateDateTime();
+                setInterval(updateDateTime, 60000);
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
